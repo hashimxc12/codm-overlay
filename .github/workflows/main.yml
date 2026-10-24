@@ -16,23 +16,12 @@ jobs:
       run: |
         if [ -f Codm-esp-main.zip ]; then
           unzip -o Codm-esp-main.zip
-          # إذا تم فك الضغط داخل مجلد فرعي، سنقوم بنقل محتوياته مباشرة إلى الجذر
-          shopt -s dotglob
-          if [ -d "Codm-esp-main" ]; then
-            cp -r Codm-esp-main/* .
-            rm -rf Codm-esp-main
-          fi
-          # في حال كان اسم المجلد الداخلي مختلفاً (مثل codm-esp أو ما شابه)
-          for dir in */; do
-            if [ "$dir" != ".github/" ]; then
-              if [ -f "${dir}settings.gradle" ] || [ -d "${dir}app" ]; then
-                cp -r "${dir}"* .
-                rm -rf "$dir"
-                break
-              fi
-            fi
-          done
         fi
+        # إذا وجد مجلد فرعي ناتج عن فك الضغط، ننقل محتوياته فوراً إلى الجذر
+        if [ -d "Codm-esp-main" ]; then
+          cp -r Codm-esp-main/* .
+        fi
+        # عرض محتويات المجلد للتأكد من وجود مجلد app في المكان الصحيح
         ls -la
 
     - name: set up JDK 17
