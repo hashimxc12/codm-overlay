@@ -12,6 +12,13 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Unzip project source
+      run: |
+        if [ -f Codm-esp-main.zip ]; then
+          unzip -o Codm-esp-main.zip
+          cp -rn Codm-esp-main/* . || true
+        fi
+
     - name: set up JDK 17
       uses: actions/setup-java@v4
       with:
@@ -26,4 +33,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: "**/build/outputs/apk/debug/*.apk"
