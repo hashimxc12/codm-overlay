@@ -12,16 +12,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Unzip and Fix Structure
+    - name: Unzip and Fix Path
       run: |
         if [ -f Codm-esp-main.zip ]; then
-          unzip -o Codm-esp-main.zip
+          unzip -q Codm-esp-main.zip
+          # البحث التلقائي عن المجلد الناتج ونقل محتوياته للجذر الرئيسي
+          find . -maxdepth 2 -type d -name "Codm-esp-main*" | while read dir; do
+            if [ "$dir" != "." ]; then
+              cp -r "$dir"/* .
+            fi
+          done
         fi
-        # إذا وجد مجلد فرعي ناتج عن فك الضغط، ننقل محتوياته فوراً إلى الجذر
-        if [ -d "Codm-esp-main" ]; then
-          cp -r Codm-esp-main/* .
-        fi
-        # عرض محتويات المجلد للتأكد من وجود مجلد app في المكان الصحيح
         ls -la
 
     - name: set up JDK 17
