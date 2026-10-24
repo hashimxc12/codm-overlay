@@ -12,11 +12,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Unzip project source
+    - name: Unzip and Fix Structure
       run: |
         if [ -f Codm-esp-main.zip ]; then
           unzip -o Codm-esp-main.zip
-          cp -rn Codm-esp-main/* . || true
+          if [ -d Codm-esp-main ]; then
+            cp -rn Codm-esp-main/* .
+            rm -rf Codm-esp-main
+          fi
         fi
 
     - name: set up JDK 17
